@@ -24,11 +24,13 @@ void admin_menu(){
 
 ADMIN getAdmin(){
     ADMIN ad;
+    //ID is generated automatically
+    ad.ID_admin = id_counter_AD;
+    id_counter_AD++;
     printf("Entrer votre Prenom\n");
     fgets(ad.pr, sizeof(ad.pr), stdin);
     printf("Entrer votre Nom\n");
     fgets(ad.nm, sizeof(ad.nm ), stdin);
-    //ID is generated automatically
 
     printf("Entrer votre Login\n");
     fgets(ad.login, sizeof(ad.login ), stdin);
@@ -39,24 +41,34 @@ ADMIN getAdmin(){
         printf("Entrer votre age\n");
         scanf("%d", &ad.age);
     } while (ad.age <= 0);
-    
-
-
     return ad;
 }
 
-void newAdmin(char filename[], ADMIN ad){
-    FILE *f = fopen(filename, "a");
+void newAdmin(char adminfile[], ADMIN ad){
+    FILE *f = fopen(adminfile, "a");
     if (f = NULL)
     {
         printf("[X]Il y a eu un souci. Veillez reessayer\n");
     }else{
-        fprintf(f,"%s %s %s %s %d\n",ad.pr, ad.nm, ad.login, ad.passwd);
+        fprintf(f,"%d %s %s %s %s %d\n", ad.ID_admin,ad.pr, ad.nm, ad.login, ad.passwd, ad.age);
         fclose(f);
     }
     
 }
 
-int adminlog(char filename[], char login, char password){
-    
+int adminlog(char adminfile[], char login, char password){
+    FILE *f = fopen(adminfile, "a+");
+    if (f = NULL)
+        printf("[X]Il y a eu un souci dans l'ouverture du fichier");
+    else{
+        while ()
+        {
+            /* code */
+        }
+        
+    }
 }
+
+
+
+
