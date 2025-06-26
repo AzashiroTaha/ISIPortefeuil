@@ -31,26 +31,32 @@ typedef struct
 
 typedef struct 
 {
-    char Id[15], pr[20], nm[20], role[20], login[100], passwd[100];
-    int age;
+    char  pr[20], nm[20], role[20], login[100], passwd[100];
+    int ID_admin,age;
 }ADMIN;
 
 typedef struct 
 {
-    char ID_client[15], pr[20], nm[20], addresse[50], login[100], passwd[100];
+    char pr[20], nm[20], addresse[50], login[100], passwd[100];
     DATE datenaiss;
-    int tel[9];
+    int ID_client, tel[9];
 }CLIENT;
 
 //generate id
-int id_counter = 1234;
-void setID(char firstname[], char name[]);
+int auto_id_admin();
+int auto_id_client();
 
 //Admin's functions
-
 ADMIN getAdmin();
 
-void newAdmin(char filename[], ADMIN ad);
+void newAdmin(char adminfile[], ADMIN ad);//creer un admin
+
+int adminlog(char filename[], char login[], char password[]);
+
+//Client's functions
+CLIENT getClient();
+void newClient(FILE clientfile[], CLIENT cl);
+
 
 
 #endif // FONCTION_H_INCLUDED

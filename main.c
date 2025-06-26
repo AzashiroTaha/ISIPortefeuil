@@ -21,6 +21,8 @@ int main(){
      printf("---------------------------------------------\n");
      system("read 1 -s -r -p 'Appuyez sur une touche pour continuer'");
      system("clear");
+
+     
      break;
    case 3:
      system("clear");

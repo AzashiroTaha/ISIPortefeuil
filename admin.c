@@ -3,16 +3,22 @@
 #include"function.h"
 
 //After loging in, Admin_menu
-void admin_menu(){
-    printf("|=========================================|\n");
-    printf("|[1]Creer un compte admin                 |\n");
-    printf("|[2]Creer un compte client                |\n");
-    printf("|[3]Retrait pour un client                |\n");
-    printf("|[4]Depot  pour un client                 |\n");
-    printf("|[5]Faire un virement                     |\n");
-    printf("|[6]Deconnexion                           |\n");
-    printf("|=========================================|\n");
-}
+int admin_menu(){
+    int choice;
+    do
+    {
+        printf("|=========================================|\n");
+        printf("|[1]Creer un compte admin                 |\n");
+        printf("|[2]Creer un compte client                |\n");
+        printf("|[3]Retrait pour un client                |\n");
+        printf("|[4]Depot  pour un client                 |\n");
+        printf("|[5]Faire un virement                     |\n");
+        printf("|[6]Deconnexion                           |\n");
+        printf("|=========================================|\n");
+        printf(">>");
+        scanf("%d", &choice);
+    } while (choice < 1 || choice >6);
+ }   
 
 
 /*typedef struct 
@@ -21,12 +27,14 @@ void admin_menu(){
     int age;
 }ADMIN;
 */
+int auto_id_admin() {
+    static int admin_id = 110000; // Initial value
+    return admin_id++;
+}
 
 ADMIN getAdmin(){
     ADMIN ad;
-    //ID is generated automatically
-    ad.ID_admin = id_counter_AD;
-    id_counter_AD++;
+    ad.ID_admin = auto_id_admin();
     printf("Entrer votre Prenom\n");
     fgets(ad.pr, sizeof(ad.pr), stdin);
     printf("Entrer votre Nom\n");
@@ -56,17 +64,24 @@ void newAdmin(char adminfile[], ADMIN ad){
     
 }
 
-int adminlog(char adminfile[], char login, char password){
+int adminlog(char adminfile[], char login[], char password[]){
+    ADMIN ad;
+    int found = 0;
     FILE *f = fopen(adminfile, "a+");
-    if (f = NULL)
+    if (f == NULL)
         printf("[X]Il y a eu un souci dans l'ouverture du fichier");
     else{
-        while ()
+        while (fscanf(f, "%d %s %s %s %s %d\n", ad.ID_admin,ad.pr, ad.nm, ad.login, ad.passwd, ad.age) != 0)
         {
-            /* code */
+            if (strcmp(ad.login, login) == 0 && strcmp(ad.passwd, password) == 0)
+            {
+                found++;
+            }
+            fclose(f);
         }
         
     }
+    return found;
 }
 
 

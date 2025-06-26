@@ -6,21 +6,19 @@
 //After login, client_menu
 int client_menu(){
     int choice;
-
     do
     {
-        /* code */
+        printf("|=========================================|\n");
+        printf("|[1]Modifier Informations                 |\n");
+        printf("|[2]Consulter mon solde                   |\n");
+        printf("|[3]Retrait                               |\n");
+        printf("|[4]Depot                                 |\n");
+        printf("|[5]Virement                              |\n");
+        printf("|[6]Desactiver mon compte                 |\n");
+        printf("|=========================================|\n");
+        printf(">>");
+        scanf("%d", &choice);
     } while (choice < 1 || choice > 7);
-    
-    printf("|=========================================|\n");
-    printf("|[1]Modifier Informations                 |\n");
-    printf("|[2]Consulter mon solde                   |\n");
-    printf("|[3]Retrait                               |\n");
-    printf("|[4]Depot                                 |\n");
-    printf("|[5]Virement                              |\n");
-    printf("|[6]Desactiver mon compte                 |\n");
-    
-    printf("|=========================================|\n");
 }
 
 /*
@@ -31,12 +29,13 @@ typedef struct
     int tel[9];
 }CLIENT;
 */
-
+ int auto_id_client(){
+    static int client_id = 120000; // Initial value
+    return client_id++;
+}
 CLIENT getClient(){
     CLIENT cl;
-    //ID is generated automatically
-    cl.ID_client = id_counter_CL;
-    id_counter_CL++;
+    cl.ID_client = auto_id_client();
     printf("Entrer votre Prenom\n");
     fgets(cl.pr, sizeof(cl.pr), stdin);
     printf("Entrer votre Nom\n");
@@ -61,15 +60,15 @@ CLIENT getClient(){
         scanf("%d", &cl.datenaiss.a);
     } while (cl.datenaiss.a > 2025);
 
-    do
-    {
         printf("Numero de telephoneahh \n");
-        scanf("%d", &cl.age);
-    } while (cl.age <= 0);
-    return cl;
+        
 
     printf("Entrer votre Login\n");
     fgets(cl.login, sizeof(cl.login ), stdin);
     printf("Entrer votre mot de passe\n");
     fgets(cl.passwd, sizeof(cl.passwd), stdin);
+}
+
+void newClient(FILE clientfile[], CLIENT cl){
+    
 }

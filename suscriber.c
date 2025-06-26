@@ -5,7 +5,7 @@
 
 
 // suscribe_menu
-void suscribe(){
+int suscribe(){
     int choice;
     do
     {
