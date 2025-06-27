@@ -10,14 +10,17 @@ int menu(){
 
     do
     {
-        printf("|=========================================|\n");
+        printf("\n|=========================================|\n");
         printf("|[1]Connexion Client                      |\n");
         printf("|[2]Connexion Administrateur              |\n");
         printf("|[3]Inscription                           |\n");
         printf("|=========================================|\n");
         printf(">>>>>");
         scanf("%d", &choice);
-        system("read -p 'Press enter to continue'");
+        system("clear");
+        if (choice <1 || choice > 3)
+            printf("\n[X]Attention! Choix %d invalide", choice);
+        system("clear");
     } while (choice <1 || choice > 3);
     
     return choice;

@@ -35,29 +35,33 @@ int auto_id_admin() {
 ADMIN getAdmin(){
     ADMIN ad;
     ad.ID_admin = auto_id_admin();
+
     printf("Entrer votre Prenom\n");
-    fgets(ad.pr, sizeof(ad.pr), stdin);
+    scanf("%19s", ad.pr);
+
     printf("Entrer votre Nom\n");
-    fgets(ad.nm, sizeof(ad.nm ), stdin);
+    scanf("%19s", ad.nm);
 
     printf("Entrer votre Login\n");
-    fgets(ad.login, sizeof(ad.login ), stdin);
+    scanf("%99s", ad.login);
+
     printf("Entrer votre mot de passe\n");
-    fgets(ad.passwd, sizeof(ad.passwd), stdin);
-    do
-    {
+    scanf("%99s", ad.passwd);
+
+    do {
         printf("Entrer votre age\n");
         scanf("%d", &ad.age);
     } while (ad.age <= 0);
+
     return ad;
 }
-
 void newAdmin(char adminfile[], ADMIN ad){
     FILE *f = fopen(adminfile, "a");
-    if (f = NULL)
+    if (f == NULL)
     {
         printf("[X]Il y a eu un souci. Veillez reessayer\n");
     }else{
+        ad = getAdmin();
         fprintf(f,"%d %s %s %s %s %d\n", ad.ID_admin,ad.pr, ad.nm, ad.login, ad.passwd, ad.age);
         fclose(f);
     }
@@ -67,19 +71,17 @@ void newAdmin(char adminfile[], ADMIN ad){
 int adminlog(char adminfile[], char login[], char password[]){
     ADMIN ad;
     int found = 0;
-    FILE *f = fopen(adminfile, "a+");
-    if (f == NULL)
-        printf("[X]Il y a eu un souci dans l'ouverture du fichier");
-    else{
-        while (fscanf(f, "%d %s %s %s %s %d\n", ad.ID_admin,ad.pr, ad.nm, ad.login, ad.passwd, ad.age) != 0)
-        {
-            if (strcmp(ad.login, login) == 0 && strcmp(ad.passwd, password) == 0)
-            {
-                found++;
+    FILE *f = fopen(adminfile, "r");
+    if (f == NULL) {
+        printf("[X]Il y a eu un souci dans l'ouverture du fichier\n");
+    } else {
+        while (fscanf(f, "%d %s %s %s %s %d", &ad.ID_admin, ad.pr, ad.nm, ad.login, ad.passwd, &ad.age) == 6) {
+            if (strcmp(ad.login, login) == 0 && strcmp(ad.passwd, password) == 0) {
+                found = 1;
+                break;
             }
-            fclose(f);
         }
-        
+        fclose(f);
     }
     return found;
 }
