@@ -1,13 +1,16 @@
 #include<stdio.h>
 #include<string.h>
+#include<stdlib.h>
 #include"function.h"
 
 
 //After login, client_menu
 int client_menu(){
     int choice;
-    do
-    {
+        printf(">>>>>>>>>>> CONNEXION REUSSIE <<<<<<<<<<<<|\n");
+        printf("\n");
+        // system("read -p 'Appuyez sur une touche pour continuer'");
+        // system("clear");
         printf("|=========================================|\n");
         printf("|[1]Modifier Informations                 |\n");
         printf("|[2]Consulter mon solde                   |\n");
@@ -15,10 +18,11 @@ int client_menu(){
         printf("|[4]Depot                                 |\n");
         printf("|[5]Virement                              |\n");
         printf("|[6]Desactiver mon compte                 |\n");
+        printf("|[7]Deconnecter & Quitter                 |\n");
         printf("|=========================================|\n");
         printf(">>");
         scanf("%d", &choice);
-    } while (choice < 1 || choice > 7);
+        return  choice;
 }
 
 /*
@@ -37,10 +41,13 @@ CLIENT getClient(){
     CLIENT cl;
     cl.ID_client = auto_id_client();
     printf("Entrer votre Prenom\n");
+    void wipebuffer();
     fgets(cl.pr, sizeof(cl.pr), stdin);
     printf("Entrer votre Nom\n");
+    void wipebuffer();
     fgets(cl.nm, sizeof(cl.nm ), stdin);
     printf("Entrer votre adresse\n");
+    void wipebuffer();
     fgets(cl.addresse, sizeof(cl.addresse), stdin);   
     
     printf(">>>>> Votre date de naissance <<<<<");
@@ -65,10 +72,20 @@ CLIENT getClient(){
 
     printf("Entrer votre Login\n");
     fgets(cl.login, sizeof(cl.login ), stdin);
+    void wipebuffer();
     printf("Entrer votre mot de passe\n");
+    void wipebuffer();
     fgets(cl.passwd, sizeof(cl.passwd), stdin);
 }
 
-void newClient(FILE clientfile[], CLIENT cl){
-    
+void newClient(char cl_file[], CLIENT cl){
+      FILE *f = fopen(cl_file, "a");
+    if (f == NULL)
+    {
+        printf("[X]Il y a eu un souci. Veillez reessayer\n");
+    }else{
+        cl = getClient();
+        fprintf(f,"%d %s %s %s %s %d/%d/%d\n", cl.ID_client,cl.pr, cl.nm, cl.login, cl.passwd, cl.datenaiss.j, cl.datenaiss.m, cl.datenaiss.a);
+        fclose(f);
+    }
 }

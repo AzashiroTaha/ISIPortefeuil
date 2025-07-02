@@ -9,6 +9,9 @@ int admin_menu();
 int suscribe();
 //END OF MENU
 
+// clean up the buffer
+void wipebuffer();
+
 //choice & redirection
 int choix();
 
@@ -43,6 +46,11 @@ typedef struct
 }CLIENT;
 
 //generate id
+int admin_id(char file[]);
+
+// int get_current_adminid(char id_adminfile[]);
+// int nxt_id(char id_adminfile[]);
+
 int auto_id_admin();
 int auto_id_client();
 
@@ -55,7 +63,7 @@ int adminlog(char filename[], char login[], char password[]);
 
 //Client's functions
 CLIENT getClient();
-void newClient(FILE clientfile[], CLIENT cl);
+void newClient(char clientfile[], CLIENT cl);
 
 
 

@@ -5,19 +5,18 @@
 //After loging in, Admin_menu
 int admin_menu(){
     int choice;
-    do
-    {
         printf("|=========================================|\n");
         printf("|[1]Creer un compte admin                 |\n");
         printf("|[2]Creer un compte client                |\n");
         printf("|[3]Retrait pour un client                |\n");
         printf("|[4]Depot  pour un client                 |\n");
         printf("|[5]Faire un virement                     |\n");
-        printf("|[6]Deconnexion                           |\n");
+        printf("|[6]Deconnecter & Quitter                 |\n");
         printf("|=========================================|\n");
-        printf(">>");
+        printf(">>>>>");
         scanf("%d", &choice);
-    } while (choice < 1 || choice >6);
+        
+        return choice;
  }   
 
 
@@ -32,29 +31,96 @@ int auto_id_admin() {
     return admin_id++;
 }
 
+//ID yi sonal nagn ma sheuttttt
+// int admin_id(char file[]){
+//     int last_id, id1, reid;
+//     //getting the current id
+//     FILE *f = fopen(file, "r");
+
+//     if (f == NULL)
+//     {
+//         printf("Fichier inexistant!\n");
+//     }else{
+//         while (fscanf(f,"%d", &last_id) != 0)
+//         {
+//             id1 = last_id;
+//         }
+//         fclose(f);
+//     }
+
+//     reid = id1+1;
+    
+//     f = fopen(file, "w");
+//     if (f == NULL)
+//     {
+//         printf("Fichier inexistant!\n");
+//     }else
+//     {
+//         fprintf(f,"%d", reid);
+//     }
+    
+//     return reid;
+// }
+
+
+int admin_id( char file[]) {
+    int last_id = 0;
+    int reid;
+
+    // Ouvre le fichier en lecture
+    FILE *f = fopen(file, "r");
+    if (f == NULL) {
+        printf("Erreur : impossible d'ouvrir le fichier %s\n", file);
+        return -1;
+    }
+
+    // Lis le dernier ID (supposé être le seul ou le dernier dans le fichier)
+    if (fscanf(f, "%d", &last_id) != 1) {
+        printf("Erreur : impossible de lire l'ID dans le fichier %s\n", file);
+        fclose(f);
+        return -1;
+    }
+    fclose(f);
+
+    // Incrémente l'ID
+    reid = last_id + 1;
+
+    // Ouvre le fichier en écriture pour enregistrer le nouvel ID
+    f = fopen(file, "w");
+    if (f == NULL) {
+        printf("Erreur : impossible d'ouvrir le fichier %s en écriture\n", file);
+        return -1;
+    }
+    fprintf(f, "%d", reid);
+    fclose(f);
+
+    return reid;
+}
+
 ADMIN getAdmin(){
     ADMIN ad;
-    ad.ID_admin = auto_id_admin();
 
     printf("Entrer votre Prenom\n");
-    scanf("%19s", ad.pr);
+    scanf("%s", ad.pr);
 
     printf("Entrer votre Nom\n");
-    scanf("%19s", ad.nm);
+    scanf("%s", ad.nm);
 
     printf("Entrer votre Login\n");
-    scanf("%99s", ad.login);
+    scanf("%s", ad.login);
 
     printf("Entrer votre mot de passe\n");
-    scanf("%99s", ad.passwd);
+    scanf("%s", ad.passwd);
 
     do {
         printf("Entrer votre age\n");
         scanf("%d", &ad.age);
     } while (ad.age <= 0);
 
+    ad.ID_admin = admin_id("file_admin_id");
     return ad;
 }
+
 void newAdmin(char adminfile[], ADMIN ad){
     FILE *f = fopen(adminfile, "a");
     if (f == NULL)
@@ -85,6 +151,8 @@ int adminlog(char adminfile[], char login[], char password[]){
     }
     return found;
 }
+
+
 
 
 

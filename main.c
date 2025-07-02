@@ -5,7 +5,7 @@
 
 int main() {
     int choice1;
-    char adfile[] = "admin_file.txt", clfile[] = "client_file.txt", accfile[] = "account_file.txt";
+    char adfile[] = "admin_file.txt", clfile[] = "client_file.txt", accfile[] = "account_file.txt", ad_idfile[] = "file_admin_id", cl_idfile[] = "file_client_id";
     int running = 1;
 
     do {
@@ -18,38 +18,124 @@ int main() {
                 printf(">>>>> Bienvenu dans votre espace Client <<<<<\n");
                 printf("---------------------------------------------\n");
                 system("read -p 'Press enter to continue'");
+                system("clear");
+
+                int back = 1;
+                        do
+                        {
+                            int choice = client_menu();
+                            system("clear");            
+                            switch (choice)
+                            {
+                            case 1:
+                                /* code */
+                                break;
+    
+                            case 2:
+                                /* code */
+                                break;
+                            case 3:
+                                /* code */
+                                break;
+    
+                            case 4:
+                                /* code */
+                                break;
+    
+                            case 5:
+                                /* code */
+                                break;
+
+                            case 6:
+                                /* code */
+                                break;
+    
+                            case 7:
+                                back = 0;
+                                printf(">>>>> AU REVOIR <<<<<\n");
+                                break;
+                            
+                            default:
+                                printf("[X]Option non valide!!\n");
+                                printf("\n");
+                                break;
+                            }
+                        } while (back);
+                        
+
+
                 // newAdmin("admin_file.txt", ad);
                 // Process finished, back to main menu automatically
                 break;
             }
-            case 2: {
+            case 2: { //ADMINNN
                 char login[30], passwd[30];
                 printf("----- SE CONNECTER A VOTRE COMPTE -----\n");
-                printf("Pseudo: \n");
+                printf("[?]Pseudo: ");
                 scanf("%30s", login);
-                printf("Mot de passe: \n");
+                printf("[?]Mot de passe: ");
                 scanf("%30s", passwd);
 
                 int response = adminlog("admin_file.txt", login, passwd);
 
                 switch (response) { // Admin authentication
                     case 1:
+                        
+                        // system("clear");
+                        printf("[+]Connexion reussie\n");
+                        system("read -p 'Appuyez sur une touche pour continuer'");
                         system("clear");
                         printf("> Bienvenu dans votre espace Administrateur <\n");
                         printf("---------------------------------------------\n");
                         system("read -p 'Appuyez sur une touche pour continuer'");
                         system("clear");
-                        // After finishing, go back to main menu automatically
-                        break;
 
-                    default:
-                        printf("---------------------------------------------\n");
-                        printf("Pseudo ou Mot de passe incorrecte\n");
-                        break;
+                        int back = 1;
+                        do
+                        {   
+                            
+                            int choice = admin_menu();
+                            system("clear");            
+                            switch (choice)
+                            {
+                            case 1:
+                                ADMIN ad;
+                                newAdmin(adfile, ad);
+                                break;
+                            case 2:
+                                CLIENT cl;
+                                newClient(clfile, cl);
+                                break;
+                            case 3:
+                                printf("Faire un retrait\n");
+                                break;
+    
+                            case 4:
+                                 printf("Faire un DEpot\n");
+                                break;
+    
+                            case 5:
+                                 printf("Faire un VIrement\n");
+                                break;
+    
+                            case 6:
+                                back = 0;
+                                printf(">>>>> AU REVOIR <<<<<\n");
+                                break;
+                            
+                            default:
+                            // After finishing, go back to main menu automatically
+                            printf("---------------------------------------------\n");
+                            printf("Pseudo ou Mot de passe incorrecte\n");
+                            break;
+                            }
+                        } while (back);
+                        
                 }
                 break;
             }
             case 3: { //Suscription
+                
                 system("clear");
                 printf(">>  Bienvenu dans votre espace Inscription <<\n");
                 printf("---------------------------------------------\n");
