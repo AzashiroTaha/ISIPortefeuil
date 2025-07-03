@@ -40,19 +40,14 @@ typedef struct
 
 typedef struct 
 {
-    char pr[20], nm[20], addresse[50], login[100], passwd[100];
+    char pr[20], nm[20], addresse[50], login[100], passwd[100], tel[10];
     DATE datenaiss;
-    int ID_client, tel[9];
+    int ID_client;
 }CLIENT;
 
 //generate id
-int admin_id(char file[]);
+int auto_id( char file[]);
 
-// int get_current_adminid(char id_adminfile[]);
-// int nxt_id(char id_adminfile[]);
-
-int auto_id_admin();
-int auto_id_client();
 
 //Admin's functions
 ADMIN getAdmin();
@@ -64,6 +59,8 @@ int adminlog(char filename[], char login[], char password[]);
 //Client's functions
 CLIENT getClient();
 void newClient(char clientfile[], CLIENT cl);
+int check_num(char numero[]);
+int unique_num(char file[], char num[]);
 
 
 

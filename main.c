@@ -5,7 +5,7 @@
 
 int main() {
     int choice1;
-    char adfile[] = "admin_file.txt", clfile[] = "client_file.txt", accfile[] = "account_file.txt", ad_idfile[] = "file_admin_id", cl_idfile[] = "file_client_id";
+    char adfile[] = "admin_file.txt", clfile[] = "client_file.txt", accfile[] = "account_file.txt";
     int running = 1;
 
     do {

@@ -1,7 +1,8 @@
 #include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
-#include"function.h"
+#include<ctype.h>
+#include "function.h"
 
 
 //After login, client_menu
@@ -33,50 +34,105 @@ typedef struct
     int tel[9];
 }CLIENT;
 */
- int auto_id_client(){
-    static int client_id = 120000; // Initial value
-    return client_id++;
+
+int check_num(char numero[]){
+    if (strlen(numero) != 9) {
+        return 0;
+    }
+    
+    for (int i = 0; i < 9; i++) {
+        if (!isdigit(numero[i])) {
+            return 0;
+        }
+    }
+    
+    if ((numero[0] == '7' && numero[1] == '7') ||  // 77
+        (numero[0] == '7' && numero[1] == '8') ||  // 78
+        (numero[0] == '7' && numero[1] == '6') ||  // 76
+        (numero[0] == '7' && numero[1] == '5')) {  // 75
+        return 1; // Numéro valide
+    }
+    
+    return 0; // Opérateur non valide
 }
+
+// Verifier si le num existe ou pas
+int unique_num(char file[], char num[10]){
+    FILE *f = fopen(file, "r");
+    if (f == NULL)
+    {
+        printf("[x]ERreur dans l'ouverture du fichier\n");
+    }else
+    {
+        CLIENT cl;
+        while (fscanf(f, "%d %s %s %s %s %s %d/%d/%d\n", &cl.ID_client, cl.pr, cl.nm, cl.login, cl.passwd, cl.tel, &cl.datenaiss.j, &cl.datenaiss.m, &cl.datenaiss.a) != 1)
+        {
+            if (strcmp(num, cl.tel) == 0)
+            {
+                return 1;
+            }
+        }
+        fclose(f);
+    }
+    return 0;
+}
+
+
 CLIENT getClient(){
     CLIENT cl;
-    cl.ID_client = auto_id_client();
     printf("Entrer votre Prenom\n");
-    void wipebuffer();
-    fgets(cl.pr, sizeof(cl.pr), stdin);
+    scanf("%s", cl.pr);
+
     printf("Entrer votre Nom\n");
-    void wipebuffer();
-    fgets(cl.nm, sizeof(cl.nm ), stdin);
+    scanf(" %s", cl.nm);
+
     printf("Entrer votre adresse\n");
-    void wipebuffer();
-    fgets(cl.addresse, sizeof(cl.addresse), stdin);   
-    
-    printf(">>>>> Votre date de naissance <<<<<");
-    do
-    {
+    // scanf(" %s", cl.addresse);
+    wipebuffer();
+    fgets(cl.addresse, sizeof(cl.addresse), stdin);
+
+    printf(">>>>> Votre date de naissance <<<<<\n");
+    do {
         printf("Jour\n>");
-        scanf("%d", &cl.datenaiss.j);
+        scanf(" %d", &cl.datenaiss.j);
     } while (cl.datenaiss.j < 1 || cl.datenaiss.j > 31);
-    do
-    {
+
+    do {
         printf("Mois\n>");
-        scanf("%d", &cl.datenaiss.m);
+        scanf(" %d", &cl.datenaiss.m);
     } while (cl.datenaiss.m < 1 || cl.datenaiss.m > 12);
-    do
-    {
+
+    do {
         printf("Annee\n>");
-        scanf("%d", &cl.datenaiss.a);
+        scanf(" %d", &cl.datenaiss.a);
     } while (cl.datenaiss.a > 2025);
 
-        printf("Numero de telephoneahh \n");
-        
+    
+    int chek, uno;
+    do
+    {
+        printf("Numero de telephone\n");
+        scanf(" %s", cl.tel);
+        check_num(cl.tel);
+        unique_num("client_file.txt", cl.tel);
+        if (chek != 0 || uno != 0 || strlen(cl.tel) != 9)
+        {
+            printf("[x]Numero saisie invalide!\n");
+        }
+    } while (chek != 0 || uno != 0);
+    
 
     printf("Entrer votre Login\n");
-    fgets(cl.login, sizeof(cl.login ), stdin);
-    void wipebuffer();
+    scanf(" %s", cl.login);
+
     printf("Entrer votre mot de passe\n");
-    void wipebuffer();
-    fgets(cl.passwd, sizeof(cl.passwd), stdin);
+    scanf(" %s", cl.passwd);
+ 
+    cl.ID_client = auto_id("ids_file");
+    return cl;
 }
+
+
 
 void newClient(char cl_file[], CLIENT cl){
       FILE *f = fopen(cl_file, "a");
@@ -85,7 +141,7 @@ void newClient(char cl_file[], CLIENT cl){
         printf("[X]Il y a eu un souci. Veillez reessayer\n");
     }else{
         cl = getClient();
-        fprintf(f,"%d %s %s %s %s %d/%d/%d\n", cl.ID_client,cl.pr, cl.nm, cl.login, cl.passwd, cl.datenaiss.j, cl.datenaiss.m, cl.datenaiss.a);
+        fprintf(f,"%d %s %s %s %s %s %d/%d/%d \n", cl.ID_client,cl.pr, cl.nm, cl.login, cl.passwd, cl.tel, cl.datenaiss.j, cl.datenaiss.m, cl.datenaiss.a);
         fclose(f);
     }
 }
