@@ -25,7 +25,11 @@ int admin_menu(){
     char Id[15], pr[20], nm[20], role[20], login[100], passwd[100];
     int age;
 }ADMIN;
-*/
+*/// int get_current_adminid(char id_adminfile[]);
+// int nxt_id(char id_adminfile[]);
+
+int auto_id_admin();
+int auto_id_client();
 int auto_id_admin() {
     static int admin_id = 110000; // Initial value
     return admin_id++;

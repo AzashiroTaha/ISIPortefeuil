@@ -35,96 +35,97 @@ typedef struct
 }CLIENT;
 */
 
+// Fonction pour vérifier si le numéro est valide (format et opérateur)
 int check_num(char numero[]){
     if (strlen(numero) != 9) {
-        return 0;
+        return 0; // Longueur invalide
     }
     
+    // Vérifier que tous les caractères sont des chiffres
     for (int i = 0; i < 9; i++) {
         if (!isdigit(numero[i])) {
-            return 0;
+            return 0; // Contient des caractères non-numériques
         }
     }
-    
+
     if ((numero[0] == '7' && numero[1] == '7') ||  // 77
         (numero[0] == '7' && numero[1] == '8') ||  // 78
         (numero[0] == '7' && numero[1] == '6') ||  // 76
         (numero[0] == '7' && numero[1] == '5')) {  // 75
-        return 1; // Numéro valide
+        return 1; 
     }
     
-    return 0; // Opérateur non valide
+    return 0; 
 }
 
-// Verifier si le num existe ou pas
 int unique_num(char file[], char num[10]){
     FILE *f = fopen(file, "r");
-    if (f == NULL)
-    {
-        printf("[x]ERreur dans l'ouverture du fichier\n");
+    if (f == NULL) {
+        printf("[x]Erreur dans l'ouverture du fichier\n");
+        return 0; // Considérer comme unique si le fichier n'existe pas
     }else
     {
         CLIENT cl;
-        while (fscanf(f, "%d %s %s %s %s %s %d/%d/%d\n", &cl.ID_client, cl.pr, cl.nm, cl.login, cl.passwd, cl.tel, &cl.datenaiss.j, &cl.datenaiss.m, &cl.datenaiss.a) != 1)
-        {
-            if (strcmp(num, cl.tel) == 0)
-            {
-                return 1;
+        while (fscanf(f, "%d %s %s %s %s %s %d/%d/%d\n", 
+                      &cl.ID_client, cl.pr, cl.nm, cl.login, 
+                      cl.passwd, cl.tel, &cl.datenaiss.j, 
+                      &cl.datenaiss.m, &cl.datenaiss.a) == 9) {
+            if (strcmp(num, cl.tel) == 0) {
+                fclose(f);
+                return 1; // Numéro trouvé (pas unique)
             }
         }
-        fclose(f);
     }
-    return 0;
+    
+    
+    fclose(f);
+    return 0; // Numéro unique
 }
-
 
 CLIENT getClient(){
     CLIENT cl;
     printf("Entrer votre Prenom\n");
     scanf("%s", cl.pr);
-
     printf("Entrer votre Nom\n");
     scanf(" %s", cl.nm);
-
     printf("Entrer votre adresse\n");
-    // scanf(" %s", cl.addresse);
     wipebuffer();
     fgets(cl.addresse, sizeof(cl.addresse), stdin);
-
+    
     printf(">>>>> Votre date de naissance <<<<<\n");
     do {
         printf("Jour\n>");
         scanf(" %d", &cl.datenaiss.j);
     } while (cl.datenaiss.j < 1 || cl.datenaiss.j > 31);
-
+    
     do {
         printf("Mois\n>");
         scanf(" %d", &cl.datenaiss.m);
     } while (cl.datenaiss.m < 1 || cl.datenaiss.m > 12);
-
+    
     do {
         printf("Annee\n>");
         scanf(" %d", &cl.datenaiss.a);
     } while (cl.datenaiss.a > 2025);
-
     
+    // CORRECTION de la logique de validation du numéro
     int chek, uno;
-    do
-    {
-        printf("Numero de telephone\n");
+    do {
+        printf("[+]Numero de telephone\n>");
         scanf(" %s", cl.tel);
-        check_num(cl.tel);
-        unique_num("client_file.txt", cl.tel);
-        if (chek != 0 || uno != 0 || strlen(cl.tel) != 9)
-        {
-            printf("[x]Numero saisie invalide!\n");
-        }
-    } while (chek != 0 || uno != 0);
+        
+        chek = check_num(cl.tel);
+        uno = unique_num("client_file.txt", cl.tel);
+        if(chek == 0 || uno == 1)
+            printf("[X]Numero Saisie invalide\n");
+        
+        
+    } while (chek == 0 || uno == 1);
     
-
+    printf("[+]Nemuro valide!!\n");
+    
     printf("Entrer votre Login\n");
     scanf(" %s", cl.login);
-
     printf("Entrer votre mot de passe\n");
     scanf(" %s", cl.passwd);
  

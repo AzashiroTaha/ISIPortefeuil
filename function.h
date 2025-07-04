@@ -40,7 +40,7 @@ typedef struct
 
 typedef struct 
 {
-    char pr[20], nm[20], addresse[50], login[100], passwd[100], tel[10];
+    char pr[20], nm[20], addresse[50], login[100], passwd[100], tel[20];
     DATE datenaiss;
     int ID_client;
 }CLIENT;
