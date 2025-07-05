@@ -25,11 +25,10 @@ typedef struct
 
 typedef struct
 {
-    char account_name[20], status[20], type[20], tel[9], ID_client[15];
-    int interest, balance;
-    DATE creation_date;
-
-
+    char status[20], type[20], tel[20], acc_num[20];
+    int ceiling, ID_client, balance;
+    float interest;
+    char creation_date[50];
 }Account;
 
 typedef struct 
@@ -61,6 +60,12 @@ CLIENT getClient();
 void newClient(char clientfile[], CLIENT cl);
 int check_num(char numero[]);
 int unique_num(char file[], char num[]);
+
+//Shared functions like retrieving money, transfering, putting moyen in a account
+
+void get_money(int Id_client);
+void put_money(int Id_client);
+void transfert_money(char numA[], char numB[]);
 
 
 

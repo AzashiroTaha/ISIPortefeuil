@@ -58,7 +58,7 @@ int check_num(char numero[]){
     return 0; 
 }
 
-int unique_num(char file[], char num[10]){
+int unique_num(char file[], char num[]){
     FILE *f = fopen(file, "r");
     if (f == NULL) {
         printf("[x]Erreur dans l'ouverture du fichier\n");
@@ -130,12 +130,30 @@ CLIENT getClient(){
     scanf(" %s", cl.passwd);
  
     cl.ID_client = auto_id("ids_file");
+
+    //Account field
+    /*
+    typedef struct
+    {
+        char status[20], type[20], tel[20];
+        int interest, balance, acc_num, ID_client;
+        DATE creation_date;
+    }Account;
+    */
+    
+
+
+    // Account acc;
+
+
+
+
     return cl;
 }
 
 
 
-void newClient(char cl_file[], CLIENT cl){
+Account newClient(char cl_file[], CLIENT cl){
       FILE *f = fopen(cl_file, "a");
     if (f == NULL)
     {
@@ -145,4 +163,5 @@ void newClient(char cl_file[], CLIENT cl){
         fprintf(f,"%d %s %s %s %s %s %d/%d/%d \n", cl.ID_client,cl.pr, cl.nm, cl.login, cl.passwd, cl.tel, cl.datenaiss.j, cl.datenaiss.m, cl.datenaiss.a);
         fclose(f);
     }
+    
 }
