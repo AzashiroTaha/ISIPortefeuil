@@ -30,7 +30,7 @@ typedef struct
 */
 
 
-void getting_account(char num, int id_cli, CLIENT cl){
+Account getting_account(char num, int id_cli, CLIENT cl){
     Account acc;
     system("clear");
     system("read -p 'Appuyez sur une touche pour continuer'");
@@ -39,9 +39,8 @@ void getting_account(char num, int id_cli, CLIENT cl){
     printf("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
 
     // account number
-    unsigned long long num = 100000000000000 + (random() % 999999999999999);
-
-    sprintf(acc.acc_num, "%s*%llu",cl.pr,num);
+    unsigned long long acc_num_gen = 100000000000000ULL + (random() % 900000000000000ULL);
+    sprintf(acc.acc_num, "%s*%llu", cl.pr, acc_num_gen);
     // the account type
     printf("++++++++++++++++++++++++++++++++++++++++\n");
     printf("++++++++++++ TYPE DE COMPTE ++++++++++++\n");
@@ -67,8 +66,20 @@ void getting_account(char num, int id_cli, CLIENT cl){
         acc.interest = 0.4;
     }
     
-    
-    
+    strcpy(acc.status, "Actif");
+    acc.balance = 0;
+    time_t current_time;
+    time(&current_time);
+    sprintf(acc.creation_date, "%s", ctime(&current_time));
 
-    
+    // Enregistrement dans un fichier
+    FILE *f = fopen("accounts.txt", "a");
+    if (f != NULL) {
+        fprintf(f, "%s;%s;%s;%d;%d;%s;%d;%s", acc.acc_num, acc.type, acc.status, acc.ceiling, acc.balance, acc.creation_date, acc.ID_client, cl.pr);
+        fclose(f);
+    } else {
+        printf("Erreur lors de l'ouverture du fichier accounts.txt\n");
+    }
+
+    return acc;
 }

@@ -153,7 +153,7 @@ CLIENT getClient(){
 
 
 
-Account newClient(char cl_file[], CLIENT cl){
+CLIENT newClient(char cl_file[], CLIENT cl){
       FILE *f = fopen(cl_file, "a");
     if (f == NULL)
     {
@@ -163,5 +163,5 @@ Account newClient(char cl_file[], CLIENT cl){
         fprintf(f,"%d %s %s %s %s %s %d/%d/%d \n", cl.ID_client,cl.pr, cl.nm, cl.login, cl.passwd, cl.tel, cl.datenaiss.j, cl.datenaiss.m, cl.datenaiss.a);
         fclose(f);
     }
-    
+    return cl;
 }

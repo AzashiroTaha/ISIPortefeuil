@@ -57,7 +57,7 @@ int adminlog(char filename[], char login[], char password[]);
 
 //Client's functions
 CLIENT getClient();
-void newClient(char clientfile[], CLIENT cl);
+CLIENT newClient(char clientfile[], CLIENT cl);
 int check_num(char numero[]);
 int unique_num(char file[], char num[]);
 
