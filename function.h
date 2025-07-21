@@ -47,6 +47,10 @@ typedef struct
 //generate id
 int auto_id( char file[]);
 
+//password hash
+void md5_to_string(unsigned char *md5_hash, char *output);
+void hash_password_md5(const char *password, char *hash_string);
+
 
 //Admin's functions
 ADMIN getAdmin();
@@ -60,6 +64,7 @@ CLIENT getClient();
 CLIENT newClient(char clientfile[], CLIENT cl);
 int check_num(char numero[]);
 int unique_num(char file[], char num[]);
+CLIENT clientlog(char login[], char password[]);
 
 //Shared functions like retrieving money, transfering, putting moyen in a account
 
@@ -67,6 +72,23 @@ void get_money(int Id_client);
 void put_money(int Id_client);
 void transfert_money(char numA[], char numB[]);
 
+
+
+//Accout part
+Account getting_account(char num[], int id_cli, CLIENT cl);
+
+
+//for the password encryption
+#define ROTR(x, n) (((x) >> (n)) | ((x) << (32 - (n))))
+#define CH(x, y, z) (((x) & (y)) ^ (~(x) & (z)))
+#define MAJ(x, y, z) (((x) & (y)) ^ ((x) & (z)) ^ ((y) & (z)))
+#define EP0(x) (ROTR(x, 2) ^ ROTR(x, 13) ^ ROTR(x, 22))
+#define EP1(x) (ROTR(x, 6) ^ ROTR(x, 11) ^ ROTR(x, 25))
+#define SIG0(x) (ROTR(x, 7) ^ ROTR(x, 18) ^ ((x) >> 3))
+#define SIG1(x) (ROTR(x, 17) ^ ROTR(x, 19) ^ ((x) >> 10))
+
+void sha256_openssl(const char* input, char* output);
+void sha256_custom(const char* input, char* output);
 
 
 #endif // FONCTION_H_INCLUDED

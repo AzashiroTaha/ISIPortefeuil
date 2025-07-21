@@ -30,13 +30,13 @@ typedef struct
 */
 
 
-Account getting_account(char num, int id_cli, CLIENT cl){
+Account getting_account(char num[], int id_cli, CLIENT cl){
     Account acc;
     system("clear");
     system("read -p 'Appuyez sur une touche pour continuer'");
-    printf("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
-    printf("|~~~~~~~~~~~~ VOTRE PORTE FEUILLE ~~~~~~~~~~~~|\n");
-    printf("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
+    printf("\t\t\t\t\t\t\t\t\t|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
+    printf("\t\t\t\t\t\t\t\t\t|~~~~~~~~~~~~ VOTRE PORTE FEUILLE ~~~~~~~~~~~~|\n");
+    printf("\t\t\t\t\t\t\t\t\t|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|\n");
 
     // account number
     unsigned long long acc_num_gen = 100000000000000ULL + (random() % 900000000000000ULL);
@@ -75,10 +75,10 @@ Account getting_account(char num, int id_cli, CLIENT cl){
     // Enregistrement dans un fichier
     FILE *f = fopen("accounts.txt", "a");
     if (f != NULL) {
-        fprintf(f, "%s;%s;%s;%d;%d;%s;%d;%s", acc.acc_num, acc.type, acc.status, acc.ceiling, acc.balance, acc.creation_date, acc.ID_client, cl.pr);
+        fprintf(f, "%s %s %s %d %d %s %d %s/n", acc.acc_num, acc.type, acc.status, acc.ceiling, acc.balance, acc.creation_date, acc.ID_client, cl.pr);
         fclose(f);
     } else {
-        printf("Erreur lors de l'ouverture du fichier accounts.txt\n");
+        printf("[X]Erreur lors de l'ouverture du fichier accounts.txt\n");
     }
 
     return acc;

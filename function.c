@@ -1,6 +1,10 @@
 #include<stdio.h>
 #include<string.h>
 #include "function.h"
+#include <stdint.h>
+#include <mbedtls/sha256.h>
+#include <gcrypt.h>
+#include <openssl/sha.h>
 
 
 int auto_id( char file[]){
@@ -36,3 +40,6 @@ int auto_id( char file[]){
 
     return reid;
 }
+
+
+

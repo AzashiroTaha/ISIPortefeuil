@@ -23,6 +23,7 @@ int main() {
                 printf("[?]Mot de passe: ");
                 scanf("%29s", passwd);
                 
+                  
                 // Vérifier les identifiants du client
                 //int response = clientlog(clfile, login, passwd); // Assumant qu'une fonction clientlog existe
                 
@@ -89,7 +90,7 @@ int main() {
                                 break;
                         }
                     } while (back);
-                // } else {
+                // } else {s
                 //     printf("---------------------------------------------\n");
                 //     printf("Pseudo ou Mot de passe incorrecte\n");
                 //     system("read -p 'Appuyez sur une touche pour continuer'");
@@ -131,7 +132,9 @@ int main() {
                                 }
                                 case 2: {
                                     CLIENT cl;
-                                    newClient(clfile, cl);
+                                    Account acc;
+                                    cl = newClient(clfile, cl);
+                                    acc = getting_account(cl.tel,cl.ID_client,cl);
                                     break;
                                 }
                                 case 3:

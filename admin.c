@@ -71,6 +71,7 @@ int auto_id_admin() {
 
 ADMIN getAdmin(){
     ADMIN ad;
+    char pass[20];
 
     printf("Entrer votre Prenom\n");
     scanf("%s", ad.pr);
@@ -83,6 +84,7 @@ ADMIN getAdmin(){
 
     printf("Entrer votre mot de passe\n");
     scanf("%s", ad.passwd);
+
 
     do {
         printf("Entrer votre age\n");
