@@ -189,10 +189,13 @@ int main() {
                 system("read -p 'Appuyez sur une touche pour continuer'");
                 system("clear");
                 
-                int choice3 = suscribe();
+                CLIENT cl;
+                Account acc;
+                cl = newClient(clfile, cl);
+                acc = getting_account(cl.tel,cl.ID_client,cl);
                 
                 // Gérer le résultat de l'inscription
-                if (choice3 == 1) {
+                if () {
                     printf("Inscription réussie !\n");
                 } else {
                     printf("Erreur lors de l'inscription.\n");
