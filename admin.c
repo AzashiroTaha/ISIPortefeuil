@@ -83,7 +83,8 @@ ADMIN getAdmin(){
     scanf("%s", ad.login);
 
     printf("Entrer votre mot de passe\n");
-    scanf("%s", ad.passwd);
+    scanf("%s", pass);
+    hash_password(pass, ad.passwd);
 
 
     do {
@@ -124,6 +125,23 @@ int adminlog(char adminfile[], char login[], char password[]){
         fclose(f);
     }
     return found;
+}
+
+ADMIN return_ad(char adminfile[], char login[], char password[]){
+    ADMIN ad;
+    FILE *f = fopen(adminfile, "r");
+    if (f == NULL) {
+        printf("[X]Il y a eu un souci dans l'ouverture du fichier\n");
+    } else {
+        while (fscanf(f, "%d %s %s %s %s %d", &ad.ID_admin, ad.pr, ad.nm, ad.login, ad.passwd, &ad.age) == 6) {
+            if (strcmp(ad.login, login) == 0 && strcmp(ad.passwd, password) == 0) {
+                return ad;
+                break;
+            }
+        }
+        fclose(f);
+    }
+    return ad;
 }
 
 

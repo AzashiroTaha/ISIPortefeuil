@@ -10,7 +10,7 @@ int client_menu(){
     int choice;
         printf(">>>>>>>>>>> CONNEXION REUSSIE <<<<<<<<<<<<|\n");
         printf("\n");
-        // system("read -p 'Appuyez sur une touche pour continuer'");
+        // system("recl -p 'Appuyez sur une touche pour continuer'");
         // system("clear");
         printf("|=========================================|\n");
         printf("|[1]Modifier Informations                 |\n");
@@ -29,7 +29,7 @@ int client_menu(){
 /*
 typedef struct 
 {
-    char ID_client, pr[20], nm[20], addresse[50], login[100], passwd[100];
+    char ID_client, pr[20], nm[20], cldresse[50], login[100], passwd[100];
     DATE datenaiss;
     int tel[9];
 }CLIENT;
@@ -84,13 +84,14 @@ int unique_num(char file[], char num[]){
 
 CLIENT getClient(){
     CLIENT cl;
+    char pass[30];
     printf("Entrer votre Prenom\n");
     scanf("%s", cl.pr);
     printf("Entrer votre Nom\n");
     scanf(" %s", cl.nm);
-    printf("Entrer votre adresse\n");
+    printf("Entrer votre clresse\n");
     wipebuffer();
-    fgets(cl.addresse, sizeof(cl.addresse), stdin);
+    fgets(cl.addresse, sizeof(cl.addresse ), stdin);
     
     printf(">>>>> Votre date de naissance <<<<<\n");
     do {
@@ -127,25 +128,10 @@ CLIENT getClient(){
     printf("Entrer votre Login\n");
     scanf(" %s", cl.login);
     printf("Entrer votre mot de passe\n");
-    scanf(" %s", cl.passwd);
+    scanf(" %s", pass);
+    hash_password(pass, cl.passwd);
  
     cl.ID_client = auto_id("ids_file");
-
-    //Account field
-    /*
-    typedef struct
-    {
-        char status[20], type[20], tel[20];
-        int interest, balance, acc_num, ID_client;
-        DATE creation_date;
-    }Account;
-    */
-    
-
-
-    // Account acc;
-
-
 
 
     return cl;
@@ -154,6 +140,7 @@ CLIENT getClient(){
 
 
 CLIENT newClient(char cl_file[], CLIENT cl){
+    cl.ID_client = -1;
       FILE *f = fopen(cl_file, "a");
     if (f == NULL)
     {
@@ -163,5 +150,49 @@ CLIENT newClient(char cl_file[], CLIENT cl){
         fprintf(f,"%d %s %s %s %s %s %d/%d/%d \n", cl.ID_client,cl.pr, cl.nm, cl.login, cl.passwd, cl.tel, cl.datenaiss.j, cl.datenaiss.m, cl.datenaiss.a);
         fclose(f);
     }
+
     return cl;
+}
+
+int clientlog(char clientfile[], char login[], char password[]){
+    CLIENT cl;
+    int found = 0;
+    FILE *f = fopen(clientfile, "r");
+    if (f == NULL) {
+        printf("[X]Il y a eu un souci dans l'ouverture du fichier\n");
+    } else {
+        while (fscanf(f,"%d %s %s %s %s %s %d/%d/%d \n", &cl.ID_client, cl.pr, cl.nm, cl.login, cl.passwd, cl.tel, &cl.datenaiss.j, &cl.datenaiss.m, &cl.datenaiss.a) == 9) {
+            if (strcmp(cl.login, login) == 0 && strcmp(cl.passwd, password) == 0) {
+                found = 1;
+                break;
+            }
+        }
+        fclose(f);
+    }
+    return found;
+}
+
+CLIENT return_cl(char clientfile[], char login[], char password[]){
+    CLIENT cl;
+    FILE *f = fopen(clientfile, "r");
+    if (f == NULL) {
+        printf("[X]Il y a eu un souci dans l'ouverture du fichier\n");
+    } else {
+        while (fscanf(f,"%d %s %s %s %s %s %d/%d/%d \n", &cl.ID_client, cl.pr, cl.nm, cl.login, cl.passwd, cl.tel, &cl.datenaiss.j, &cl.datenaiss.m, &cl.datenaiss.a) == 9) {
+            if (strcmp(cl.login, login) == 0 && strcmp(cl.passwd, password) == 0) {
+                return cl;
+                break;
+            }
+        }
+        fclose(f);
+    }
+    return cl;
+}
+
+void showclient(CLIENT cl){
+    printf("[+]Prenom : %s\n", cl.pr);
+    printf("[+]Nom : %s\n", cl.nm);
+    printf("[+]Date de naissance : %d/%d/%d\n", cl.datenaiss.j, cl.datenaiss.m, cl.datenaiss.a);
+    printf("[+]Adresse : %s\n", cl.addresse);
+    printf("[+]Numero de telephone : %s\n", cl.tel);
 }

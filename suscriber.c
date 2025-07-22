@@ -40,7 +40,10 @@ Account getting_account(char num[], int id_cli, CLIENT cl){
 
     // account number
     unsigned long long acc_num_gen = 100000000000000ULL + (random() % 900000000000000ULL);
-    sprintf(acc.acc_num, "%s*%llu", cl.pr, acc_num_gen);
+    sprintf(acc.acc_num, "%s-%llu", cl.pr, acc_num_gen);
+    acc.ID_client = id_cli;
+    strcpy(acc.cl_name, cl.pr);
+    strcpy(acc.tel, cl.tel);
     // the account type
     printf("++++++++++++++++++++++++++++++++++++++++\n");
     printf("++++++++++++ TYPE DE COMPTE ++++++++++++\n");
@@ -56,17 +59,17 @@ Account getting_account(char num[], int id_cli, CLIENT cl){
 
     if (type == 1)
     {
-        strcpy(acc.type, "Courant");
+        strcpy(acc.type, "Courant\0");
         acc.ceiling = 2000000;
         acc.interest = 0;
     }else
     {
-        strcpy(acc.type, "Epargne");
+        strcpy(acc.type, "Epargne\0");
         acc.ceiling = 0;
         acc.interest = 0.4;
     }
     
-    strcpy(acc.status, "Actif");
+    strcpy(acc.status, "Actif\0");
     acc.balance = 0;
     time_t current_time;
     time(&current_time);
@@ -75,11 +78,36 @@ Account getting_account(char num[], int id_cli, CLIENT cl){
     // Enregistrement dans un fichier
     FILE *f = fopen("accounts.txt", "a");
     if (f != NULL) {
-        fprintf(f, "%s %s %s %d %d %s %d %s/n", acc.acc_num, acc.type, acc.status, acc.ceiling, acc.balance, acc.creation_date, acc.ID_client, cl.pr);
+        fprintf(f, "%s %s %s %d %.2f %d %s %d %s %s\n", acc.acc_num, acc.type, acc.status, acc.ceiling, acc.interest, acc.balance, acc.creation_date, acc.ID_client, acc.cl_name, acc.tel);
         fclose(f);
     } else {
         printf("[X]Erreur lors de l'ouverture du fichier accounts.txt\n");
     }
 
+    return acc;
+}
+
+void print_acc(Account acc){
+    printf("[+]Type de Compte : %s\n", acc.type);
+    printf("[+]Numero Compte : %s\n", acc.acc_num);
+    printf("[+]Statut : " BRIGHT_GREEN "%s\n" RESET, acc.status);
+    printf("[+]Plafonnement : %d\n", acc.ceiling);
+    printf("[+]Date e creation : "CYAN "%s\n" RESET, acc.creation_date);
+}
+
+Account return_acc(char accfile[] ,char num[]){
+    Account acc;
+    FILE *f = fopen(accfile, "r");
+    if (f == NULL) {
+        printf("[X]Il y a eu un souci dans l'ouverture du fichier\n");
+    } else {
+        while (fscanf(f, "%s %s %s %d %.2f %d %s %d %s %s\n", acc.acc_num, acc.type, acc.status, &acc.ceiling, &acc.interest, &acc.balance, acc.creation_date, &acc.ID_client, acc.cl_name, acc.tel) == 10) {
+            if (strcmp(acc.tel, num) == 0) {
+                return acc;
+                break;
+            }
+        }
+        fclose(f);
+    }
     return acc;
 }
