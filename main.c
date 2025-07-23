@@ -30,10 +30,10 @@ int main()
             hash_password(passwd, hashed);
 
             int response = clientlog(clfile, login, hashed);
-            
+
             switch (response)
             {
-                case 1:
+            case 1:
                 CLIENT cl = return_cl(clfile, login, hashed);
                 Account acc = return_acc(accfile, cl.tel);
                 { // success
@@ -59,20 +59,20 @@ int main()
                                 // Ajouter la logique de consultation de solde
                                 system("read -p 'Appuyez sur une touche pour continuer'");
                                 break;
-                                
-                            }else
+                            }
+                            else
                             {
                                 printf(RED "[X]VOTRE COMPTE N'EST PAS ACTIF\n" RESET);
                                 break;
                             }
                             break;
                         case 2:
-                           if (strcmp(acc.status, "Actif\0") == 0)
+                            if (strcmp(acc.status, "Actif\0") == 0)
                             {
                                 checkbalance(cl.tel, accfile);
                                 break;
-                                
-                            }else
+                            }
+                            else
                             {
                                 printf(RED "[X]VOTRE COMPTE N'EST PAS ACTIF\n" RESET);
                                 break;
@@ -80,12 +80,16 @@ int main()
                         case 3:
                             if (strcmp(acc.status, "Actif") == 0)
                             {
-                                printf("Consultation de solde\n");
-                                // Ajouter la logique de consultation de solde
-                                system("read -p 'Appuyez sur une touche pour continuer'");
+                                int xaliss;
+                                do
+                                {
+                                    printf("[+]Entrer la somme que vous voulez deposer(FCFA)\n >>");
+                                    scanf("%d", &xaliss);
+                                } while (xaliss <= 0);
+                                get_money(cl.tel, accfile, xaliss);
                                 break;
-                                
-                            }else
+                            }
+                            else
                             {
                                 printf(RED "[X]VOTRE COMPTE N'EST PAS ACTIF\n" RESET);
                                 break;
@@ -93,8 +97,7 @@ int main()
                             break;
 
                         case 4:
-                        printf("[DEBUG] %s", acc.status);
-                        if (strcmp(acc.status, "Actif") == 0)
+                            if (strcmp(acc.status, "Actif") == 0)
                             {
                                 // putting some pesos
                                 int xaliss;
@@ -104,8 +107,9 @@ int main()
                                     scanf("%d", &xaliss);
                                 } while (xaliss <= 0);
                                 put_money(cl.tel, accfile, xaliss);
-                                break; 
-                            }else
+                                break;
+                            }
+                            else
                             {
                                 printf(RED "[X]VOTRE COMPTE N'EST PAS ACTIF\n" RESET);
                                 break;
@@ -115,18 +119,26 @@ int main()
                         case 5:
                             if (strcmp(acc.status, "Actif") == 0)
                             {
-                                printf("Consultation de solde\n");
-                                // Ajouter la logique de consultation de solde
+                                char tel_receiver[10];
+                                printf("[+]Entrer le numero de telephone du destinataire\n >>");
+                                scanf("%9s", tel_receiver);
+                                int xaliss;
+                                do
+                                {
+                                    printf("\n[+]Entrer la somme que vous voulez deposer(FCFA)\n >>");
+                                    scanf("%d", &xaliss);
+                                } while (xaliss <= 0);
+                                transfer(acc.tel,tel_receiver,accfile,xaliss);
                                 break;
-                                
-                            }else
+                            }
+                            else
                             {
                                 printf(RED RED "[X]VOTRE COMPTE N'EST PAS ACTIF\n" RESET RESET);
                                 break;
                             }
                             break;
                         case 6:
-                            printf(YELLOW"[!]Attention votre compte va etre desactive\n");
+                            printf(YELLOW "[!]Attention votre compte va etre desactive\n");
                             printf("Appuyez sur Entrée pour continuer...");
                             getchar();
 
@@ -147,17 +159,17 @@ int main()
                     } while (back);
                     break;
                 }
-                case 0: // Connexion échouée
-                    printf("---------------------------------------------\n");
-                    printf("Pseudo ou Mot de passe incorrecte\n");
-                    system("read -p 'Appuyez sur une touche pour continuer'");
-                    break;
+            case 0: // Connexion échouée
+                printf("---------------------------------------------\n");
+                printf("Pseudo ou Mot de passe incorrecte\n");
+                system("read -p 'Appuyez sur une touche pour continuer'");
+                break;
 
-                default:
-                    printf("Erreur de connexion\n");
-                    system("read -p 'Appuyez sur une touche pour continuer'");
-                    break;
-                }
+            default:
+                printf("Erreur de connexion\n");
+                system("read -p 'Appuyez sur une touche pour continuer'");
+                break;
+            }
             break;
         }
 
@@ -172,87 +184,104 @@ int main()
             hash_password(passwd, hashed);
 
             int response = adminlog(adfile, login, hashed);
-            
+
             switch (response)
             {
             case 1:
                 ADMIN ad = return_ad(adfile, login, hashed);
-            { // Connexion réussie
-                system("clear");
-                printf("[+]Connexion reussie\n");
-                system("read -p 'Appuyez sur une touche pour continuer'");
-
-                printf("> Bienvenu dans votre espace Administrateur %s %s<\n", ad.pr, ad.nm);
-                printf("---------------------------------------------\n");
-                // system("read -p 'Appuyez sur une touche pour continuer'");
-                // system("clear");
-
-                int back = 1;
-                do
-                {
-                    int choice = admin_menu();
+                { // Connexion réussie
                     system("clear");
+                    printf("[+]Connexion reussie\n");
+                    system("read -p 'Appuyez sur une touche pour continuer'");
 
-                    switch (choice)
-                    {
-                    case 1:
-                    {
-                        ADMIN ad;
-                        newAdmin(adfile, ad);
-                        break;
-                    }
-                    case 2:
-                    {
-                        CLIENT cl;
-                        Account acc;
-                        cl = newClient(clfile, cl);
-                        acc = getting_account(cl.tel, cl.ID_client, cl);
-                        system("read -p 'Appuyez sur une touche pour continuer'");
-                        showclient(cl);
-                        break;
-                    }
-                    case 3:
-                        printf("Faire un retrait (Admin)\n");
-                        // Ajouter la logique pour le retrait admin
-                        system("read -p 'Appuyez sur une touche pour continuer'");
-                        break;
+                    printf("> Bienvenu dans votre espace Administrateur %s %s<\n", ad.pr, ad.nm);
+                    printf("---------------------------------------------\n");
+                    // system("read -p 'Appuyez sur une touche pour continuer'");
+                    // system("clear");
 
-                    case 4:{
-                        char tel_client[10];
-                        int amount;
-                        printf("[+]Entrer le numero de telephone du client\n >>");
-                        scanf("%9s", tel_client);
-                        do
+                    int back = 1;
+                    do
+                    {
+                        int choice = admin_menu();
+                        system("clear");
+
+                        switch (choice)
                         {
-                            printf("\n[+]Entrer le montant\n >");
-                            scanf("%d", &amount);
-                        } while (amount <= 0);
-                        put_money_admin(tel_client, accfile, amount);
-                        printf("Appuyez sur Entrée pour continuer...");
-                        getchar();
+                        case 1:
+                        {
+                            ADMIN ad;
+                            newAdmin(adfile, ad);
+                            break;
+                        }
+                        case 2:
+                        {
+                            CLIENT cl;
+                            Account acc;
+                            cl = newClient(clfile, cl);
+                            acc = getting_account(cl.tel, cl.ID_client, cl);
+                            system("read -p 'Appuyez sur une touche pour continuer'");
+                            showclient(cl);
+                            break;
+                        }
+                        case 3:
+                            char tel_client[10];
+                            int amount;
+                            printf("[+]Entrer le numero de telephone du client\n >>");
+                            scanf("%9s", tel_client);
+                            do
+                            {
+                                printf("\n[+]Entrer le montant\n >");
+                                scanf("%d", &amount);
+                            } while (amount <= 0);
+                            get_money_admin(tel_client, accfile, amount);
+                            getchar();
+                            break;
 
-                        break;
-                    }
+                        case 4:
+                        {
+                            char tel_client[10];
+                            int amount;
+                            printf("[+]Entrer le numero de telephone du client\n >>");
+                            scanf("%9s", tel_client);
+                            do
+                            {
+                                printf("\n[+]Entrer le montant\n >");
+                                scanf("%d", &amount);
+                            } while (amount <= 0);
+                            put_money_admin(tel_client, accfile, amount);
+                            printf("Appuyez sur Entrée pour continuer...");
+                            getchar();
 
-                    case 5:
-                        printf("Faire un virement (Admin)\n");
-                        // Ajouter la logique pour le virement admin
-                        system("read -p 'Appuyez sur une touche pour continuer'");
-                        break;
+                            break;
+                        }
 
-                    case 6:
-                        back = 0;
-                        printf(">>>>> AU REVOIR <<<<<\n");
-                        break;
+                        case 5:{
+                            char tel_client[10];
+                            int amount;
+                            printf("[+]Entrer le numero de telephone du client\n >>");
+                            scanf("%9s", tel_client);
+                            do
+                            {
+                                printf("\n[+]Entrer le montant\n >");
+                                scanf("%d", &amount);
+                            } while (amount <= 0);
+                            get_money_admin(tel_client, accfile, amount);
+                            getchar();
+                            break;
+                        }
+                        case 6:
+                            back = 0;
+                            printf(">>>>> AU REVOIR <<<<<\n");
+                            break;
 
-                    default:
-                        printf("Choix invalide. Veuillez réessayer.\n");
-                        system("read -p 'Appuyez sur une touche pour continuer'");
-                        break;
-                    }
-                } while (back);
-                break;
-            }
+                        default:
+                            printf("Choix invalide. Veuillez réessayer.\n");
+                            system("read -p 'Appuyez sur une touche pour continuer'");
+                            break;
+                        }
+                    } while (back);
+                    break;
+                }
             case 0: // Connexion échouée
                 printf("---------------------------------------------\n");
                 printf("Pseudo ou Mot de passe incorrecte\n");

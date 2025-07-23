@@ -59,6 +59,7 @@ void newAdmin(char adminfile[], ADMIN ad);//creer un admin
 int adminlog(char filename[], char login[], char password[]);
 ADMIN return_ad(char adminfile[], char login[], char passwd[]);
 void put_money_admin(char num[], char accfile[], int amount);
+void get_money_admin(char num[], char accfile[], int amount);
 
 
 
@@ -78,8 +79,9 @@ void showclient(CLIENT cl);
 void put_money(char num[], char accfile[], int amount);
 void checkbalance(char num[], char accfile[]);
 void get_money(char num[], char accfile[], int amount);
-void transfert_money(char numA[], char numB[]);
+void transfer(char sender_tel[], char receiver_tel[], char accfile[], int amount);
 void disableacc(char num[], char accfile[]);
+void edit_info(char num[], char accfile[]);
 
 
 
