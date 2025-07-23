@@ -61,7 +61,7 @@ int check_num(char numero[]){
 int unique_num(char file[], char num[]){
     FILE *f = fopen(file, "r");
     if (f == NULL) {
-        printf("[x]Erreur dans l'ouverture du fichier\n");
+        printf(RED "[x]Erreur dans l'ouverture du fichier\n" RESET);
         return 0; // Considérer comme unique si le fichier n'existe pas
     }else
     {
@@ -147,7 +147,7 @@ CLIENT newClient(char cl_file[], CLIENT cl){
         printf("[X]Il y a eu un souci. Veillez reessayer\n");
     }else{
         cl = getClient();
-        fprintf(f,"%d %s %s %s %s %s %d/%d/%d \n", cl.ID_client,cl.pr, cl.nm, cl.login, cl.passwd, cl.tel, cl.datenaiss.j, cl.datenaiss.m, cl.datenaiss.a);
+        fprintf(f,"%d %s %s %s %s %s %s %d/%d/%d \n", cl.ID_client,cl.pr, cl.nm, cl.addresse, cl.login, cl.passwd, cl.tel, cl.datenaiss.j, cl.datenaiss.m, cl.datenaiss.a);
         fclose(f);
     }
 
@@ -161,7 +161,7 @@ int clientlog(char clientfile[], char login[], char password[]){
     if (f == NULL) {
         printf("[X]Il y a eu un souci dans l'ouverture du fichier\n");
     } else {
-        while (fscanf(f,"%d %s %s %s %s %s %d/%d/%d \n", &cl.ID_client, cl.pr, cl.nm, cl.login, cl.passwd, cl.tel, &cl.datenaiss.j, &cl.datenaiss.m, &cl.datenaiss.a) == 9) {
+        while (fscanf(f,"%d %s %s %s %s %s %s %d/%d/%d \n", &cl.ID_client, cl.pr, cl.nm, cl.addresse, cl.login, cl.passwd, cl.tel, &cl.datenaiss.j, &cl.datenaiss.m, &cl.datenaiss.a) == 10) {
             if (strcmp(cl.login, login) == 0 && strcmp(cl.passwd, password) == 0) {
                 found = 1;
                 break;
@@ -178,7 +178,7 @@ CLIENT return_cl(char clientfile[], char login[], char password[]){
     if (f == NULL) {
         printf("[X]Il y a eu un souci dans l'ouverture du fichier\n");
     } else {
-        while (fscanf(f,"%d %s %s %s %s %s %d/%d/%d \n", &cl.ID_client, cl.pr, cl.nm, cl.login, cl.passwd, cl.tel, &cl.datenaiss.j, &cl.datenaiss.m, &cl.datenaiss.a) == 9) {
+        while (fscanf(f,"%d %s %s %s %s %s %s %d/%d/%d \n", &cl.ID_client, cl.pr, cl.nm, cl.addresse, cl.login, cl.passwd, cl.tel, &cl.datenaiss.j, &cl.datenaiss.m, &cl.datenaiss.a) == 10) {
             if (strcmp(cl.login, login) == 0 && strcmp(cl.passwd, password) == 0) {
                 return cl;
                 break;
@@ -194,5 +194,6 @@ void showclient(CLIENT cl){
     printf("[+]Nom : %s\n", cl.nm);
     printf("[+]Date de naissance : %d/%d/%d\n", cl.datenaiss.j, cl.datenaiss.m, cl.datenaiss.a);
     printf("[+]Adresse : %s", cl.addresse);
-    printf("[+]Numero de telephone : %s\n", cl.tel);
+    printf("[+]Numero de telephone : " BRIGHT_CYAN "%s\n" RESET, cl.tel);
+    printf("[+]Mot de passe hashe : " LIGHT_GRAY "%s\n" RESET, cl.passwd);
 }

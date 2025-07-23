@@ -344,6 +344,7 @@ void edit_info(char num[], char accfile[])
             if (strcmp(acc.tel, num) == 0)
             {
                 found = 1;
+                printf("[-]Votre pre")
             }
             // saving it to in the account file!
             fprintf(tmp, "%s %s %s %d %d %.2f %d %s %s %s\n", acc.acc_num, acc.type, acc.status, acc.ceiling, acc.balance, acc.interest, acc.ID_client, acc.cl_name, acc.tel, acc.creation_date);

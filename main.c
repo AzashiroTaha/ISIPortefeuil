@@ -125,7 +125,7 @@ int main()
                                 int xaliss;
                                 do
                                 {
-                                    printf("\n[+]Entrer la somme que vous voulez deposer(FCFA)\n >>");
+                                    printf("\n[+]Entrer le montant a transferer(FCFA)\n >>");
                                     scanf("%d", &xaliss);
                                 } while (xaliss <= 0);
                                 transfer(acc.tel,tel_receiver,accfile,xaliss);
@@ -256,20 +256,25 @@ int main()
                         }
 
                         case 5:{
-                            char tel_client[10];
+                            char tel_client[10], tel_receiver[10];
                             int amount;
-                            printf("[+]Entrer le numero de telephone du client\n >>");
+                            printf("[+]Entrer votre numero de telephone\n >>");
                             scanf("%9s", tel_client);
+                            printf("\n[+]Entrer le numero de telephone du destinataire\n >>");
+                            scanf("%9s", tel_receiver);
                             do
                             {
-                                printf("\n[+]Entrer le montant\n >");
+                                printf("\n[+]Entrer le montant a transferer\n >");
                                 scanf("%d", &amount);
                             } while (amount <= 0);
-                            get_money_admin(tel_client, accfile, amount);
+                            transfer_admin(tel_client, tel_receiver,accfile, amount);
                             getchar();
                             break;
                         }
                         case 6:
+                            show_clients(clfile);
+                            break;
+                        case 7:
                             back = 0;
                             printf(">>>>> AU REVOIR <<<<<\n");
                             break;

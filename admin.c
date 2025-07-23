@@ -12,7 +12,8 @@ int admin_menu()
     printf("|[3]Retrait pour un client                |\n");
     printf("|[4]Depot  pour un client                 |\n");
     printf("|[5]Faire un virement                     |\n");
-    printf("|[6]Deconnecter & Quitter                 |\n");
+    printf("|[6]Afficher tous les clients             |\n");
+    printf("|[7]Deconnecter & Quitter                 |\n");
     printf("|=========================================|\n");
     printf(">>>>>");
     scanf("%d", &choice);
@@ -291,4 +292,115 @@ void get_money_admin(char num[], char accfile[], int amount)
         remove("tmp.txt");
         printf(RED "[X]Aucun compte actif trouvé avec ce numéro.\n" RESET);
     }
+}
+
+void show_clients(char clfile[]){
+    FILE *f = fopen(clfile, "r");
+    if (f == NULL)
+    {
+        printf(RED "[x]Erreur dans l'ouverture du fichier\n" RESET);
+    }else
+    {
+        CLIENT cl;
+        while (fscanf(f,"%d %s %s %s %s %s %s %d/%d/%d \n", &cl.ID_client, cl.pr, cl.nm, cl.addresse, cl.login, cl.passwd, cl.tel, &cl.datenaiss.j, &cl.datenaiss.m, &cl.datenaiss.a) == 10){
+            printf("[+]Prenom : %s\n", cl.pr);
+            printf("[+]Nom : %s\n", cl.nm);
+            printf("[+]Date de naissance : %d/%d/%d\n", cl.datenaiss.j, cl.datenaiss.m, cl.datenaiss.a);
+            printf("[+]Adresse : %s\n", cl.addresse);
+            printf("[+]Numero de telephone : " BRIGHT_CYAN "%s\n" RESET, cl.tel);
+            printf("[+]Mot de passe hashe : " LIGHT_GRAY "%s\n" RESET, cl.passwd);
+            printf("\n");
+            
+        }
+    }
+    fclose(f);
+}
+
+void transfer_admin(char sender_tel[], char receiver_tel[], char accfile[], int amount) {
+    Account acc;
+    int sender_found = 0, receiver_found = 0;
+    Account sender, receiver;
+
+    FILE *f = fopen(accfile, "r");
+    FILE *tmp = fopen("tmp.txt", "w");
+
+    if (f == NULL || tmp == NULL) {
+        printf("[X]Erreur d'ouverture du fichier.\n");
+        return;
+    }
+
+    // Recherche des comptes dans le fichier
+    while (fscanf(f, "%s %s %s %d %d %f %d %s %s %s",
+                  acc.acc_num, acc.type, acc.status,
+                  &acc.ceiling, &acc.balance, &acc.interest,
+                  &acc.ID_client, acc.cl_name, acc.tel, acc.creation_date) == 10) {
+
+        if (strcmp(acc.tel, sender_tel) == 0 && strcmp(acc.status, "Actif") == 0) {
+            sender = acc;
+            sender_found = 1;
+        }
+
+        if (strcmp(acc.tel, receiver_tel) == 0 && strcmp(acc.status, "Actif") == 0) {
+            receiver = acc;
+            receiver_found = 1;
+        }
+    }
+
+    fclose(f);
+
+    // Vérifications
+    if (!sender_found) {
+        printf(RED "[X]Compte expéditeur introuvable ou inactif.\n" RESET);
+        remove("tmp.txt");
+        return;
+    }
+
+    if (!receiver_found) {
+        printf(RED "[X]Compte destinataire introuvable ou inactif.\n" RESET);
+        remove("tmp.txt");
+        return;
+    }
+
+    if (sender.balance < amount) {
+        printf(RED "[X]Solde insuffisant sur le compte expéditeur.\n" RESET);
+        remove("tmp.txt");
+        return;
+    }
+
+    if (strcmp(receiver.type, "Courant") == 0 && receiver.balance + amount > receiver.ceiling) {
+        printf(RED "[X]Le transfert dépasse le plafond du compte destinataire.\n" RESET);
+        remove("tmp.txt");
+        return;
+    }
+
+    // Appliquer le transfert
+    sender.balance -= amount;
+    receiver.balance += amount;
+
+    // Réécriture complète du fichier
+    f = fopen(accfile, "r");
+    while (fscanf(f, "%s %s %s %d %d %f %d %s %s %s",
+                  acc.acc_num, acc.type, acc.status,
+                  &acc.ceiling, &acc.balance, &acc.interest,
+                  &acc.ID_client, acc.cl_name, acc.tel, acc.creation_date) == 10) {
+
+        if (strcmp(acc.tel, sender_tel) == 0) {
+            acc = sender;
+        } else if (strcmp(acc.tel, receiver_tel) == 0) {
+            acc = receiver;
+        }
+
+        fprintf(tmp, "%s %s %s %d %d %.2f %d %s %s %s\n",
+                acc.acc_num, acc.type, acc.status,
+                acc.ceiling, acc.balance, acc.interest,
+                acc.ID_client, acc.cl_name, acc.tel, acc.creation_date);
+    }
+
+    fclose(f);
+    fclose(tmp);
+
+    remove(accfile);
+    rename("tmp.txt", accfile);
+
+    printf(GREEN "[✓] Transfert de %d FCFA effectué avec succès par l'ADMIN.\n" RESET, amount);
 }

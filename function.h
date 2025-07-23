@@ -60,6 +60,8 @@ int adminlog(char filename[], char login[], char password[]);
 ADMIN return_ad(char adminfile[], char login[], char passwd[]);
 void put_money_admin(char num[], char accfile[], int amount);
 void get_money_admin(char num[], char accfile[], int amount);
+void show_clients(char clfile[]);
+void transfer_admin(char sender_tel[], char receiver_tel[], char accfile[], int amount);
 
 
 
