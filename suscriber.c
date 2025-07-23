@@ -48,7 +48,7 @@ Account getting_account(char num[], int id_cli, CLIENT cl){
     printf("++++++++++++++++++++++++++++++++++++++++\n");
     printf("++++++++++++ TYPE DE COMPTE ++++++++++++\n");
     printf("++++++++++++++++++++++++++++++++++++++++\n");
-
+    
     int type;
     do
     {
@@ -56,43 +56,57 @@ Account getting_account(char num[], int id_cli, CLIENT cl){
         printf("[2]Epargne\n");
         scanf("%d", &type);
     } while (type < 1 || type > 2);
-
+    acc.balance = 15000;
+    
     if (type == 1)
     {
-        strcpy(acc.type, "Courant\0");
+        strcpy(acc.type, "Courant");
         acc.ceiling = 2000000;
-        acc.interest = 0;
+        acc.interest = 0.0;
     }else
     {
-        strcpy(acc.type, "Epargne\0");
+        strcpy(acc.type, "Epargne");
         acc.ceiling = 0;
         acc.interest = 0.4;
     }
     
-    strcpy(acc.status, "Actif\0");
-    acc.balance = 0;
-    time_t current_time;
-    time(&current_time);
-    sprintf(acc.creation_date, "%s", ctime(&current_time));
+    strcpy(acc.status, "Actif");
+    // time_t current_time;
+    // time(&current_time);
+    // sprintf(acc.creation_date, "%s", ctime(&current_time));
+    // printf("date de creation : %s\n", acc.creation_date);
+    time_t current_time = time(NULL);
+    strftime(acc.creation_date, sizeof(acc.creation_date), "%Y-%m-%d %H:%M:%S", localtime(&current_time));
 
+    
     // Enregistrement dans un fichier
     FILE *f = fopen("accounts.txt", "a");
     if (f != NULL) {
-        fprintf(f, "%s %s %s %d %.2f %d %s %d %s %s\n", acc.acc_num, acc.type, acc.status, acc.ceiling, acc.interest, acc.balance, acc.creation_date, acc.ID_client, acc.cl_name, acc.tel);
+        fprintf(f, "%s %s %s %d %d %.2f %d %s %s %s", acc.acc_num, acc.type, acc.status, acc.ceiling, acc.balance, acc.interest, acc.ID_client, acc.cl_name, acc.tel, acc.creation_date);
         fclose(f);
     } else {
         printf("[X]Erreur lors de l'ouverture du fichier accounts.txt\n");
     }
-
+    
     return acc;
 }
 
 void print_acc(Account acc){
+    printf("[+]Numero de telephone : %s\n", acc.tel);
     printf("[+]Type de Compte : %s\n", acc.type);
     printf("[+]Numero Compte : %s\n", acc.acc_num);
-    printf("[+]Statut : " BRIGHT_GREEN "%s\n" RESET, acc.status);
+    if (strcmp(acc.status, "Actif") == 0)
+    {
+        printf("[+]Statut : " BRIGHT_GREEN "%s\n" RESET, acc.status);  
+    }else{
+        printf("[+]Statut : " BRIGHT_RED "%s\n" RESET, acc.status);
+    }
+
     printf("[+]Plafonnement : %d\n", acc.ceiling);
     printf("[+]Date e creation : "CYAN "%s\n" RESET, acc.creation_date);
+    //printf("[+]Solde : %d\n", acc.balance);//do remove after testing
+    printf("[+]PLafond : %d\n", acc.ceiling);
+    printf("[+]Interet : %.2f\n", acc.interest);
 }
 
 Account return_acc(char accfile[] ,char num[]){
@@ -101,13 +115,13 @@ Account return_acc(char accfile[] ,char num[]){
     if (f == NULL) {
         printf("[X]Il y a eu un souci dans l'ouverture du fichier\n");
     } else {
-        while (fscanf(f, "%s %s %s %d %.2f %d %s %d %s %s\n", acc.acc_num, acc.type, acc.status, &acc.ceiling, &acc.interest, &acc.balance, acc.creation_date, &acc.ID_client, acc.cl_name, acc.tel) == 10) {
+        while (fscanf(f, "%s %s %s %d %d %f %d %s %s %s", acc.acc_num, acc.type, acc.status, &acc.ceiling, &acc.balance, &acc.interest, &acc.ID_client,acc.cl_name, acc.tel, acc.creation_date) == 10) {
             if (strcmp(acc.tel, num) == 0) {
+                fclose(f);
                 return acc;
                 break;
             }
         }
-        fclose(f);
     }
     return acc;
 }

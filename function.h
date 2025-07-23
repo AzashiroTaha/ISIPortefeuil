@@ -25,7 +25,7 @@ typedef struct
 
 typedef struct
 {
-    char status[20], type[20], tel[20], acc_num[20], cl_name[30];
+    char status[100], type[100], tel[100], acc_num[100], cl_name[100];
     int ceiling, ID_client, balance;
     float interest;
     char creation_date[50];
@@ -39,7 +39,7 @@ typedef struct
 
 typedef struct 
 {
-    char pr[20], nm[20], addresse[50], login[100], passwd[HASH_LENGTH], tel[20];
+    char pr[20], nm[20], addresse[100], login[100], passwd[HASH_LENGTH], tel[20];
     DATE datenaiss;
     int ID_client;
 }CLIENT;
@@ -58,6 +58,10 @@ void newAdmin(char adminfile[], ADMIN ad);//creer un admin
 
 int adminlog(char filename[], char login[], char password[]);
 ADMIN return_ad(char adminfile[], char login[], char passwd[]);
+void put_money_admin(char num[], char accfile[], int amount);
+
+
+
 
 //Client's functions
 CLIENT getClient();
@@ -71,10 +75,11 @@ void showclient(CLIENT cl);
 
 //Shared functions like retrieving money, transfering, putting moyen in a account
 
-void get_money(char num[], char accfile[], int amount);
-void checkbalance(char num[], char accfile[]);
 void put_money(char num[], char accfile[], int amount);
+void checkbalance(char num[], char accfile[]);
+void get_money(char num[], char accfile[], int amount);
 void transfert_money(char numA[], char numB[]);
+void disableacc(char num[], char accfile[]);
 
 
 

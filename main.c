@@ -37,10 +37,10 @@ int main()
                 CLIENT cl = return_cl(clfile, login, hashed);
                 Account acc = return_acc(accfile, cl.tel);
                 { // success
-                    print_acc(acc);
                     system("clear");
                     printf("[+]Connexion reussie\n");
                     system("read -p 'Appuyez sur une touche pour continuer'");
+                    print_acc(acc);
 
                     printf("> Bienvenu dans votre espace CLIENT %s %s<\n", cl.pr, cl.nm);
                     printf("---------------------------------------------\n");
@@ -94,18 +94,16 @@ int main()
 
                         case 4:
                         printf("[DEBUG] %s", acc.status);
-                        system("read -p 'Appuyez sur une touche pour continuer'");
                         if (strcmp(acc.status, "Actif") == 0)
                             {
-                                // putting so pesos
+                                // putting some pesos
                                 int xaliss;
                                 do
                                 {
                                     printf("[+]Entrer la somme que vous voulez deposer(FCFA)\n >>");
                                     scanf("%d", &xaliss);
                                 } while (xaliss <= 0);
-                                get_money(cl.tel, accfile, xaliss);
-                                system("read -p 'Appuyez sur une touche pour continuer'");
+                                put_money(cl.tel, accfile, xaliss);
                                 break; 
                             }else
                             {
@@ -119,7 +117,6 @@ int main()
                             {
                                 printf("Consultation de solde\n");
                                 // Ajouter la logique de consultation de solde
-                                system("read -p 'Appuyez sur une touche pour continuer'");
                                 break;
                                 
                             }else
@@ -129,9 +126,12 @@ int main()
                             }
                             break;
                         case 6:
-                            printf("Modifier profil\n");
-                            // Ajouter la logique de modification de profil
-                            system("read -p 'Appuyez sur une touche pour continuer'");
+                            printf(YELLOW"[!]Attention votre compte va etre desactive\n");
+                            printf("Appuyez sur Entrée pour continuer...");
+                            getchar();
+
+                            disableacc(acc.tel, accfile);
+                            print_acc(acc);
                             break;
 
                         case 7:
@@ -217,11 +217,22 @@ int main()
                         system("read -p 'Appuyez sur une touche pour continuer'");
                         break;
 
-                    case 4:
-                        printf("Faire un depot (Admin)\n");
-                        // Ajouter la logique pour le dépôt admin
-                        system("read -p 'Appuyez sur une touche pour continuer'");
+                    case 4:{
+                        char tel_client[10];
+                        int amount;
+                        printf("[+]Entrer le numero de telephone du client\n >>");
+                        scanf("%9s", tel_client);
+                        do
+                        {
+                            printf("\n[+]Entrer le montant\n >");
+                            scanf("%d", &amount);
+                        } while (amount <= 0);
+                        put_money_admin(tel_client, accfile, amount);
+                        printf("Appuyez sur Entrée pour continuer...");
+                        getchar();
+
                         break;
+                    }
 
                     case 5:
                         printf("Faire un virement (Admin)\n");

@@ -193,6 +193,6 @@ void showclient(CLIENT cl){
     printf("[+]Prenom : %s\n", cl.pr);
     printf("[+]Nom : %s\n", cl.nm);
     printf("[+]Date de naissance : %d/%d/%d\n", cl.datenaiss.j, cl.datenaiss.m, cl.datenaiss.a);
-    printf("[+]Adresse : %s\n", cl.addresse);
+    printf("[+]Adresse : %s", cl.addresse);
     printf("[+]Numero de telephone : %s\n", cl.tel);
 }

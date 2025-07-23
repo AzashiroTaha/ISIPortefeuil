@@ -61,6 +61,43 @@ void hash_password(char password[], char result[]) {
     sprintf(result, "%016lx", hash);
 }
 
+//disable accounte
+void disableacc(char num[], char accfile[]){
+     Account acc;
+    int found = 0;
+    FILE *f = fopen(accfile, "r");
+    FILE *tmp = fopen("tmp.txt", "w");
+    if (f == NULL || tmp == NULL) {
+        printf("[X]Il y a eu un souci dans l'ouverture du fichier\n");
+    } else {
+        while (fscanf(f, "%s %s %s %d %d %f %d %s %s %s", acc.acc_num, acc.type, acc.status, &acc.ceiling, &acc.balance, &acc.interest, &acc.ID_client,acc.cl_name, acc.tel, acc.creation_date) == 10) {
+            if (strcmp(acc.tel, num) == 0) {
+                found = 1;
+                if (strcmp(acc.status, "Actif") == 0)
+                {
+                    strcpy(acc.status, "Innactif");
+                    printf(GREEN "[✓]Votre compte a ete desactive avec succes\n" RESET);
+                }else 
+                {
+                   printf(GOLD "\n[!]Votre compte a deja ete desactive avec succes au paravant\n" RESET);
+                }
+            }
+            //saving it to in the account file!
+            fprintf(tmp, "%s %s %s %d %d %.2f %d %s %s %s\n", acc.acc_num, acc.type, acc.status, acc.ceiling, acc.balance, acc.interest, acc.ID_client, acc.cl_name, acc.tel, acc.creation_date);      
+        }
+        fclose(f);
+        fclose(tmp);
+
+        if (found == 1) {
+            remove(accfile);
+            rename("tmp.txt", accfile);
+        } else {
+            remove("tmp.txt");
+            printf(RED"[X]Aucun compte avec ce numéro trouvé.\n"RESET);
+        }
+    }
+}
+
 
 void checkbalance(char num[], char accfile[]){
     Account acc;
@@ -68,9 +105,9 @@ void checkbalance(char num[], char accfile[]){
     if (f == NULL) {
         printf("[X]Il y a eu un souci dans l'ouverture du fichier\n");
     } else {
-        while (fscanf(f, "%s %s %s %d %.2f %d %s %d %s %s\n", acc.acc_num, acc.type, acc.status, &acc.ceiling, &acc.interest, &acc.balance, acc.creation_date, &acc.ID_client, acc.cl_name, acc.tel) == 10) {
+        while (fscanf(f, "%s %s %s %d %d %f %d %s %s %s", acc.acc_num, acc.type, acc.status, &acc.ceiling, &acc.balance, &acc.interest, &acc.ID_client,acc.cl_name, acc.tel, acc.creation_date) == 10) {
             if (strcmp(acc.tel, num) == 0) {
-                printf(GREEN "[+]Votre solde est : %d", acc.balance);
+                printf(GREEN "[+]Votre solde est : %dFCFA\n"RESET, acc.balance);
                 break;
             }
         }
@@ -78,28 +115,44 @@ void checkbalance(char num[], char accfile[]){
     }
 }
 
-void get_money(char num[], char accfile[], int amount){
+void put_money(char num[], char accfile[], int amount){
     Account acc;
+    int found = 0;
     FILE *f = fopen(accfile, "r");
-    if (f == NULL) {
+    FILE *tmp = fopen("tmp.txt", "w");
+    if (f == NULL || tmp == NULL) {
         printf("[X]Il y a eu un souci dans l'ouverture du fichier\n");
     } else {
-        while (fscanf(f, "%s %s %s %d %.2f %d %s %d %s %s\n", acc.acc_num, acc.type, acc.status, &acc.ceiling, &acc.interest, &acc.balance, acc.creation_date, &acc.ID_client, acc.cl_name, acc.tel) == 10) {
+        while (fscanf(f, "%s %s %s %d %d %f %d %s %s %s", acc.acc_num, acc.type, acc.status, &acc.ceiling, &acc.balance, &acc.interest, &acc.ID_client,acc.cl_name, acc.tel, acc.creation_date) == 10) {
             if (strcmp(acc.tel, num) == 0) {
-                if (strcmp(acc.type, "Epargne"))
+                found = 1;
+                if (strcmp(acc.type, "Epargne") == 0)
                 {
                     acc.balance = acc.balance + amount;
-                }else
+                    printf(GREEN "[✓] Nouveau solde: %dFCFA\n" RESET, acc.balance);
+                }else if (strcmp(acc.type, "Courant") == 0)
                 {
                     if ((acc.balance + amount) > acc.ceiling)
                     {
                         printf(RED "[X]Depot impossible! Deplafoner votre Compte\n" RESET);
-                    }else
-                    acc.balance = acc.balance + amount;
+                    }else if((acc.balance + amount) <= acc.ceiling){
+                        acc.balance = acc.balance + amount;
+                        printf(GREEN "[✓] Nouveau solde: %dFCFA\n" RESET, acc.balance);
+                    }
                 }
-                break;
             }
-            fclose(f);
+            //saving it to in the account file!
+            fprintf(tmp, "%s %s %s %d %d %.2f %d %s %s %s\n", acc.acc_num, acc.type, acc.status, acc.ceiling, acc.balance, acc.interest, acc.ID_client, acc.cl_name, acc.tel, acc.creation_date);      
+        }
+        fclose(f);
+        fclose(tmp);
+
+        if (found == 1) {
+            remove(accfile);
+            rename("tmp.txt", accfile);
+        } else {
+            remove("tmp.txt");
+            printf(RED"[X]Aucun compte avec ce numéro trouvé.\n"RESET);
         }
     }
 }
